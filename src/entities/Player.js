@@ -208,7 +208,8 @@ export class Player extends Entity {
 
   shoot() {
     const gunX = this.centerX + this.aimX * 8;
-    const gunY = this.prone ? this.y + 18 : this.centerY - 2;
+    // Align bullet spawn with the bottom-aligned sprite's torso
+    const gunY = this.prone ? this.y + this.height - 3 : this.y + this.height - 7;
     return this.weapon.fire(gunX, gunY, this.aimX, this.aimY);
   }
 
@@ -242,22 +243,22 @@ export class Player extends Entity {
     let sprite;
     if (this.prone) {
       sprite = PLAYER_PRONE;
-      renderer.drawSprite(sprite, sx, sy + 10, flipX);
     } else if (!this.onGround) {
       sprite = PLAYER_JUMP;
-      renderer.drawSprite(sprite, sx, sy, flipX);
     } else if (Math.abs(this.vx) > 0.1) {
       sprite = PLAYER_RUN[this.animFrame % PLAYER_RUN.length];
-      renderer.drawSprite(sprite, sx, sy, flipX);
     } else {
       sprite = PLAYER_IDLE;
-      renderer.drawSprite(sprite, sx, sy, flipX);
     }
+
+    // Bottom-align sprite within entity bounds so feet touch the ground
+    const spriteOffsetY = this.height - sprite.length;
+    renderer.drawSprite(sprite, sx, sy + spriteOffsetY, flipX);
 
     // Draw gun barrel line to show aim direction
     if (!this.prone) {
       const gx = sx + 8 + this.aimX * 8;
-      const gy = sy + 8 + this.aimY * 6;
+      const gy = sy + spriteOffsetY + 7 + this.aimY * 6;
       renderer.drawRect(gx, gy, 3, 1, '#888888');
     }
   }

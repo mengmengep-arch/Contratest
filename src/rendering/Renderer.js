@@ -20,17 +20,23 @@ export class Renderer {
   resize() {
     const maxW = window.innerWidth;
     const maxH = window.innerHeight;
-    const ratio = SCREEN_WIDTH / SCREEN_HEIGHT;
+    const dpr = window.devicePixelRatio || 1;
 
-    let w = maxW;
-    let h = w / ratio;
-    if (h > maxH) {
-      h = maxH;
-      w = h * ratio;
-    }
+    // Integer scaling: snap to whole-number multiples of NES pixels
+    // so each game pixel maps to exactly N×N screen pixels (no blur)
+    const physicalW = maxW * dpr;
+    const physicalH = maxH * dpr;
+    const intScale = Math.max(1, Math.floor(Math.min(
+      physicalW / SCREEN_WIDTH,
+      physicalH / SCREEN_HEIGHT
+    )));
 
-    this.canvas.style.width = Math.floor(w) + 'px';
-    this.canvas.style.height = Math.floor(h) + 'px';
+    // Convert back to CSS pixels
+    const cssW = (SCREEN_WIDTH * intScale) / dpr;
+    const cssH = (SCREEN_HEIGHT * intScale) / dpr;
+
+    this.canvas.style.width = cssW + 'px';
+    this.canvas.style.height = cssH + 'px';
   }
 
   clear(color = '#000000') {
