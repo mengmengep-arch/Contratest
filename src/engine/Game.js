@@ -419,15 +419,23 @@ export class Game {
     this.renderer.drawText('CONTRA', SCREEN_WIDTH / 2, 50, COLORS.RED, 16, 'center');
     this.renderer.drawText('CLASSIC', SCREEN_WIDTH / 2, 70, '#fc9838', 8, 'center');
 
-    // Controls
-    this.renderer.drawText('CONTROLS:', SCREEN_WIDTH / 2, 110, COLORS.WHITE, 8, 'center');
-    this.renderer.drawText('ARROWS - MOVE/AIM', SCREEN_WIDTH / 2, 125, '#aaaaaa', 7, 'center');
-    this.renderer.drawText('Z - SHOOT', SCREEN_WIDTH / 2, 137, '#aaaaaa', 7, 'center');
-    this.renderer.drawText('X - JUMP', SCREEN_WIDTH / 2, 149, '#aaaaaa', 7, 'center');
+    // Controls - show different text for touch vs keyboard
+    if (this.input.isTouchDevice) {
+      this.renderer.drawText('TOUCH CONTROLS:', SCREEN_WIDTH / 2, 110, COLORS.WHITE, 8, 'center');
+      this.renderer.drawText('D-PAD - MOVE/AIM', SCREEN_WIDTH / 2, 125, '#aaaaaa', 7, 'center');
+      this.renderer.drawText('FIRE - SHOOT', SCREEN_WIDTH / 2, 137, '#aaaaaa', 7, 'center');
+      this.renderer.drawText('JUMP - JUMP', SCREEN_WIDTH / 2, 149, '#aaaaaa', 7, 'center');
+    } else {
+      this.renderer.drawText('CONTROLS:', SCREEN_WIDTH / 2, 110, COLORS.WHITE, 8, 'center');
+      this.renderer.drawText('ARROWS - MOVE/AIM', SCREEN_WIDTH / 2, 125, '#aaaaaa', 7, 'center');
+      this.renderer.drawText('Z - SHOOT', SCREEN_WIDTH / 2, 137, '#aaaaaa', 7, 'center');
+      this.renderer.drawText('X - JUMP', SCREEN_WIDTH / 2, 149, '#aaaaaa', 7, 'center');
+    }
 
     // Blink "press start"
     if (Math.floor(this.titleBlink / 30) % 2 === 0) {
-      this.renderer.drawText('PRESS ENTER TO START', SCREEN_WIDTH / 2, 185, COLORS.WHITE, 8, 'center');
+      const startText = this.input.isTouchDevice ? 'TAP START TO BEGIN' : 'PRESS ENTER TO START';
+      this.renderer.drawText(startText, SCREEN_WIDTH / 2, 185, COLORS.WHITE, 8, 'center');
     }
 
     // Credits
@@ -494,7 +502,8 @@ export class Game {
   drawPauseOverlay() {
     this.renderer.drawRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 'rgba(0,0,0,0.5)');
     this.renderer.drawText('PAUSED', SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 8, COLORS.WHITE, 12, 'center');
-    this.renderer.drawText('PRESS ENTER', SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 10, '#aaaaaa', 8, 'center');
+    const pauseText = this.input.isTouchDevice ? 'TAP START' : 'PRESS ENTER';
+    this.renderer.drawText(pauseText, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 10, '#aaaaaa', 8, 'center');
 
     // Unpause
     if (this.input.start) {
@@ -508,7 +517,8 @@ export class Game {
     this.renderer.drawText('SCORE: ' + String(this.score).padStart(7, '0'), SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 10, COLORS.WHITE, 8, 'center');
 
     if (Math.floor(this.titleBlink / 30) % 2 === 0) {
-      this.renderer.drawText('PRESS ENTER', SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 40, '#aaaaaa', 8, 'center');
+      const goText = this.input.isTouchDevice ? 'TAP START' : 'PRESS ENTER';
+      this.renderer.drawText(goText, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 40, '#aaaaaa', 8, 'center');
     }
   }
 
