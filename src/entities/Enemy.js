@@ -89,7 +89,8 @@ export class Soldier extends Entity {
   draw(renderer, camX, camY) {
     const sx = Math.round(this.x - camX);
     const sy = Math.round(this.y - camY);
-    renderer.drawSprite(ENEMY_SOLDIER, sx, sy, this.facing === -1);
+    const offsetY = this.height - ENEMY_SOLDIER.length;
+    renderer.drawSprite(ENEMY_SOLDIER, sx, sy + offsetY, this.facing === -1);
   }
 }
 
@@ -139,7 +140,8 @@ export class Sniper extends Entity {
   draw(renderer, camX, camY) {
     const sx = Math.round(this.x - camX);
     const sy = Math.round(this.y - camY);
-    renderer.drawSprite(ENEMY_SNIPER, sx, sy, this.facing === -1);
+    const offsetY = this.height - ENEMY_SNIPER.length;
+    renderer.drawSprite(ENEMY_SNIPER, sx, sy + offsetY, this.facing === -1);
   }
 }
 
@@ -181,10 +183,11 @@ export class Turret extends Entity {
   draw(renderer, camX, camY) {
     const sx = Math.round(this.x - camX);
     const sy = Math.round(this.y - camY);
-    renderer.drawSprite(TURRET_SPRITE, sx, sy, false);
+    const offsetY = this.height - TURRET_SPRITE.length;
+    renderer.drawSprite(TURRET_SPRITE, sx, sy + offsetY, false);
     // Draw barrel
     const bx = sx + 8 + Math.cos(this.angle) * 8;
-    const by = sy + 5 + Math.sin(this.angle) * 8;
+    const by = sy + offsetY + 5 + Math.sin(this.angle) * 8;
     renderer.drawRect(bx, by, 4, 2, '#888888');
   }
 }
@@ -243,9 +246,10 @@ export class Runner extends Entity {
   draw(renderer, camX, camY) {
     const sx = Math.round(this.x - camX);
     const sy = Math.round(this.y - camY);
+    const offsetY = this.height - ENEMY_SOLDIER.length;
     // Simple runner sprite - red soldier
-    renderer.drawSprite(ENEMY_SOLDIER, sx, sy, this.facing === -1);
+    renderer.drawSprite(ENEMY_SOLDIER, sx, sy + offsetY, this.facing === -1);
     // Tint: draw a semi-transparent red overlay
-    renderer.drawRect(sx + 3, sy + 5, 10, 14, 'rgba(255,0,0,0.3)');
+    renderer.drawRect(sx + 3, sy + offsetY + 5, 10, 14, 'rgba(255,0,0,0.3)');
   }
 }
